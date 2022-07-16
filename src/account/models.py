@@ -45,6 +45,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UserOTP(models.Model):
     SINGUP = 1
+
     LOGIN = 2
     SMS = 4
     OTP_TYPE_CHOICE = (
