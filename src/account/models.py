@@ -1,25 +1,40 @@
 from datetime import datetime
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import UserManager, AbstractBaseUser, PermissionsMixin
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 import datetime
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(
         max_length=11,
-        required=True,
+        unique=True,
+
     )
+    username = models.CharField(
+        null=True,
+        blank=True,
+        max_length=250,
+    )
+
     first_name = models.CharField(
         max_length=250,
         verbose_name=_("first name"),
         null=True,
         blank=True
     )
-    last_name = models.Charfield(
+    last_name = models.CharField(
         max_length=250,
         verbose_name=_("last name")
     )
+    objects = UserManager()
+    EMAIL_FIELD = None
+    USERNAME_FIELD = 'phone_number'
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
 
     def send_email(self, subject, mesage, from_email, **kwargs):
         """
@@ -40,7 +55,7 @@ class UserOTP(models.Model):
     code = models.CharField(verbose_name=_('code'), max_length=6)
     expire_time_start = models.DateTimeField(
         verbose_name=_("start of expire time"),
-        default=datetime.now,
+        default=datetime.datetime.now,
 
     )
     expire_time_end = models.DateTimeField(
@@ -60,4 +75,3 @@ class UserOTP(models.Model):
             return True
         else:
             return False
-

@@ -9,11 +9,12 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
-
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import account.models
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9uh6u28!h71i0@wf2e@9yep6wz=hmlwltu3oon20*fq=8z=!=c'
+SECRET_KEY = os.getenv('SECRET-KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # local apps
-    'account.apps.AccountConfig',
+    'account',
     'notification.apps.NotificationConfig',
 
-    """ Third party packages"""
+    # Third party packages
     'rest_framework',
 ]
 
@@ -123,7 +124,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'account.models.CustomUser'
+AUTH_USER_MODEL = 'account.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -131,5 +132,5 @@ REST_FRAMEWORK = {
 }
 
 # sms service config
-APIKEY = "34594E3367523348327677534242594B753077416C42672B2B566E5271364A7546624772314F4344684A6F3D"
+APIKEY = os.getenv("SMS-APIKEY")
 
